@@ -1,0 +1,12 @@
+# This script is used to remove an unwanted directory from a list of numerical directory.
+# It is helpful if any one of the geometries does not converge or has issues, and you can still keep the numbering correct.
+# System: Mac
+# Author: Junbo Chen
+# Date: August 2017
+
+import os
+
+os.system('rm -r 8') #remove the specific directory of geometry
+
+for i in range(9,13): #specify the number of geometries in range
+    os.system('mv %d %d'%(i,i-1))
