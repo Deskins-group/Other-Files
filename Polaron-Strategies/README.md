@@ -9,7 +9,7 @@ If you use these scripts or the BDM, please cite our recent paper.
 
 
 
-- **BDM-polaron-vasp.pyy** A script to create a polaronic distortion around a specified atomic site. Works with VASP POSCAR files. Usage is: "BDM-polaron-vasp.py [filename] [perc increase] [atom number] [number nearest neighbors]".
+- **BDM-polaron-vasp.py** A script to create a polaronic distortion around a specified atomic site. Works with VASP POSCAR files. Usage is: "BDM-polaron-vasp.py [filename] [perc increase] [atom number] [number nearest neighbors]".
 - **BDM-polaron-xyz.py** A script to create a polaronic distortion around a specified atomic site. Works with xyz files. Usage is: "BDM-polaron-xyz.py [filename] [perc increase] [atom number] [number nearest neighbors]".
 - **BDM-ASE.py** An example script to create a polaronic distortion around a specified atomic site use the Atomic Simulation Environment (ASE). 
 
