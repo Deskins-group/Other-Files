@@ -3,7 +3,7 @@ Here are scripts to help form polarons using the Bond Distortion Method (BDM) di
 
 The scripts work by picking a central atom, finding the n-nearest neighbors (specified by the user and usually determined by the crystal structure), and then increasing the bond distances between the central atom and the n-nearest neighbors by a specified percentage. Thus, the user needs to provide the following: filename of the undistorted structure, atom for the polaron site (e.g. 135), percentage bond increase (e.g. 4 would be a 4% bond increase), number of nearest neighbors around the central atom (e.g. 6). 
 
-Also provided is an example of how to use ASE with the bond distortion method.
+Also provided is an example of how to use ASE with the bond distortion method. We also have provided some sample input files for a modeling a polaron in TiO<sub>2</sub>. These input files have a 4% distortion around the polaron site.
 
 If you use these scripts or the BDM, please cite our recent paper. 
 
