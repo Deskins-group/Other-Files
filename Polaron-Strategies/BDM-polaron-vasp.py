@@ -24,6 +24,9 @@ def read_vasp(file_name):
     multiplier = 1.0
     num_atoms = 0
     coord_type = "Direct"
+    selective = ""
+    atom_start = 8
+    atom_end = 0
     file_xyz = open(file_name,'r')
     for line in file_xyz :
         #remove any 'bad' characters
@@ -39,6 +42,21 @@ def read_vasp(file_name):
 	if (line_number > 2) & (line_number < 6):
 	    lattice_vectors.append(line_split)
 	#print lattice_vectors
+	#Get number of atoms
+        if (line_number == 7 ):
+            for i in range(len(line_split)): 
+                num_atoms = num_atoms + int(line_split[i])
+            atom_end = num_atoms
+	    #print num_atoms
+	#Check whether selective
+	if (line_number == 8 ):
+	    if line_split[0] == "Selective":
+	        selective = "Selective"  	
+		line_number = line_number - 1
+		atom_end = atom_end + 1
+
+		#atom_start = atom_start -1
+
 	#Check whether coords in reduced or cartesian
 	if (line_number == 8 ):
 	    #print line_split[0]
@@ -46,14 +64,11 @@ def read_vasp(file_name):
 	        coord_type = "Cartesian"
             else:
 	        coord_type = "Direct"
-	#Get number of atoms
-        if (line_number == 7 ):
-            for i in range(len(line_split)): 
-                num_atoms = num_atoms + int(line_split[i])
-	    #print num_atoms
         #Read coordinates
-        if (line_number > 8) & (line_number < (num_atoms + 9)) :
+        #if (line_number > atom_start) & (line_number < (num_atoms + atom_start)) :
+        if (line_number > atom_start) & (line_number < (atom_end + atom_start)) :
 	    if coord_type == "Direct":
+	        #print line_split
 	        x_reduced = float(line_split[0])
 	        y_reduced = float(line_split[1])
 	        z_reduced = float(line_split[2])
@@ -65,6 +80,11 @@ def read_vasp(file_name):
                 atom_coords.append(y_coord)
                 atom_coords.append(z_coord)
                 coords_xyz.append(atom_coords)
+		if selective == "Selective":
+		    atom_coords.append(line_split[3])    
+		    atom_coords.append(line_split[4])    
+		    atom_coords.append(line_split[5])    
+		    #print atom_coords
 	    if coord_type == "Cartesian":
 	        x_cart = float(line_split[0])
 	        y_cart = float(line_split[1])
@@ -74,6 +94,10 @@ def read_vasp(file_name):
                 atom_coords.append(y_cart)
                 atom_coords.append(z_cart)
                 coords_xyz.append(atom_coords)
+		if selective == "Selective":
+		    atom_coords.append(line_split[3])    
+		    atom_coords.append(line_split[4])    
+		    atom_coords.append(line_split[5])    
     file_xyz.close()
     #print len(coords_xyz)
     #print coords_xyz
@@ -139,9 +163,15 @@ def vasp_output(atom_coords,file_name):
     line_number = 0
     for line in file_header :
         line_number = line_number + 1
+	if line_number == 8 :
+	    #print line
+            line_split = line.split()
+	    if line_split[0] == "Selective":
+	        file_vasp.write("Selective dynamics"+"\n")
         if line_number < 8:
 	    file_vasp.write(line)
     file_header.close() 
+    #    file_vasp.write("Selective dynamics"+"\n")
     file_vasp.write("Cartesian"+"\n")
     
     #file_vasp.write(str(len(new_coords))+"\n")
@@ -154,8 +184,12 @@ def vasp_output(atom_coords,file_name):
 	x_formatted = '{:f}'.format(new_coords[i][0])
 	y_formatted = '{:f}'.format(new_coords[i][1])
 	z_formatted = '{:f}'.format(new_coords[i][2])
+	#Need check whether selective dynamics or not
+	if len(atom_coords[i]) == 6:
+            line_print = x_formatted+" "+ y_formatted+" "+z_formatted+" "+atom_coords[i][3]+" "+atom_coords[i][4]+" "+atom_coords[i][5]+"\n" 
         #line_print = str(new_coords[i][0]) + " " + str(new_coords[i][1]) + " " + str(new_coords[i][2]) + "\n" 
-        line_print = x_formatted + " " + y_formatted + " " + z_formatted + "\n" 
+	else:
+            line_print = x_formatted + " " + y_formatted + " " + z_formatted + "\n" 
         file_vasp.write(line_print)
     file_vasp.close()
     
@@ -174,7 +208,7 @@ num_neighbors = int(sys.argv[4])
 
 #Step 1: Read in file
 atom_coords = read_vasp(file_name)
-
+#print atom_coords
 #Step 2: Determine n nearest neighbors to central polaron atom
 neighbors_list = find_nearest_neighbors(atom_coords,atom_polaron,num_neighbors)
 
@@ -183,4 +217,3 @@ new_coords = create_polaron(atom_coords,neighbors_list,atom_polaron,perc_increas
 
 #Step 4: Output new coords
 vasp_output(new_coords,file_name)
-
