@@ -72,9 +72,11 @@ def read_vasp(file_name):
                 x_reduced = float(line_split[0])
                 y_reduced = float(line_split[1])
                 z_reduced = float(line_split[2])
-                x_coord = float(lattice_vectors[0][0])*x_reduced*multiplier + float(lattice_vectors[1][0])*x_reduced*multiplier + float(lattice_vectors[2][0])*x_reduced*multiplier  
-                y_coord = float(lattice_vectors[0][1])*y_reduced*multiplier + float(lattice_vectors[1][1])*y_reduced*multiplier + float(lattice_vectors[2][1])*y_reduced*multiplier  
-                z_coord = float(lattice_vectors[0][2])*z_reduced*multiplier + float(lattice_vectors[1][2])*z_reduced*multiplier + float(lattice_vectors[2][2])*z_reduced*multiplier  
+		
+                x_coord = float(lattice_vectors[0][0])*x_reduced*multiplier + float(lattice_vectors[1][0])*y_reduced*multiplier + float(lattice_vectors[2][0])*z_reduced*multiplier
+                y_coord = float(lattice_vectors[0][1])*x_reduced*multiplier + float(lattice_vectors[1][1])*y_reduced*multiplier + float(lattice_vectors[2][1])*z_reduced*multiplier
+                z_coord = float(lattice_vectors[0][2])*x_reduced*multiplier + float(lattice_vectors[1][2])*y_reduced*multiplier + float(lattice_vectors[2][2])*z_reduced*multiplier
+		
                 atom_coords = []
                 atom_coords.append(x_coord)
                 atom_coords.append(y_coord)
