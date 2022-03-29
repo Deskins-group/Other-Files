@@ -46,14 +46,14 @@ def read_vasp(file_name):
         if (line_number == 7 ):
             for i in range(len(line_split)): 
                 num_atoms = num_atoms + int(line_split[i])
-            atom_end = num_atoms
+            atom_end = num_atoms + 1
 	    #print num_atoms
 	#Check whether selective
         if (line_number == 8 ):
             if line_split[0] == "Selective":
                 selective = "Selective"  	
                 line_number = line_number - 1
-                atom_end = atom_end + 1
+                #atom_end = atom_end + 1
 
 		#atom_start = atom_start -1
 
